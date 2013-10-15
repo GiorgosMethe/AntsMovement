@@ -1,16 +1,16 @@
-#ifndef MAP_H
-#define MAP_H
+#ifndef GRID_H
+#define GRID_H
 
 #include <vector>
-#include "ant.h"
+#include "sample.h"
 
-class map
+class grid
 {
 public:
     int width, height;
     int **antMap;
     bool isInitialized;
-    std::vector<ant> ants;
+    std::vector<sample> sampleSet;
 
     void initializeMap(int width, int height)
     {
@@ -34,14 +34,14 @@ public:
         return;
     }
 
-    void addAnt(ant sample)
+    void addSample(sample a)
     {
         if(this->isInitialized)
-            this->ants.push_back(sample);
+            this->sampleSet.push_back(a);
         return;
     }
 
 };
 
 
-#endif // MAP_H
+#endif // GRID_H

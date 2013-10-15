@@ -14,10 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    ant.cpp
+    simulation.cpp \
+    sample.cpp
 
 HEADERS  += mainwindow.h \
-    ant.h \
-    map.h
+    simulation.h \
+    grid.h \
+    sample.h
 
 FORMS    += mainwindow.ui

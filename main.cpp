@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <QTimer>
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
