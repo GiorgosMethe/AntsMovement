@@ -20,6 +20,7 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     simulation.h \
     grid.h \
-    sample.h
+    sample.h \
+    randomGenerator.h
 
 FORMS    += mainwindow.ui

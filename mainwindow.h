@@ -60,6 +60,7 @@ private:
     unsigned int antNum;
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
+    QGraphicsPixmapItem *image;
     QGraphicsRectItem *rectangle;
     QGraphicsEllipseItem *ellipse;
 

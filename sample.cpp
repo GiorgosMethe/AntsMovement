@@ -3,3 +3,8 @@
 sample::sample()
 {
 }
+
+void sample::action()
+{
+
+}

@@ -6,24 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>779</width>
-    <height>565</height>
+    <width>1044</width>
+    <height>572</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QGraphicsView" name="graphicsView">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>10</y>
-      <width>591</width>
-      <height>501</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QSpinBox" name="spinBox">
     <property name="geometry">
      <rect>
@@ -123,6 +113,77 @@
      <string>Visualize values</string>
     </property>
    </widget>
+   <widget class="QGraphicsView" name="graphicsView">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>10</y>
+      <width>611</width>
+      <height>501</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="baseSize">
+     <size>
+      <width>600</width>
+      <height>250</height>
+     </size>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+   </widget>
+   <widget class="QGraphicsView" name="graphicsView_2">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>40</y>
+      <width>250</width>
+      <height>200</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QGraphicsView" name="graphicsView_3">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>300</y>
+      <width>250</width>
+      <height>200</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>10</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Home pheromone:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>270</y>
+      <width>131</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Food pheromone:</string>
+    </property>
+   </widget>
    <widget class="QPushButton" name="pushButtonStart">
     <property name="geometry">
      <rect>
@@ -168,7 +229,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>779</width>
+     <width>1044</width>
      <height>20</height>
     </rect>
    </property>
