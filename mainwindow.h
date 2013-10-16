@@ -16,6 +16,7 @@
 #include <QPoint>
 #include <iostream>
 #include <vector>
+#include "simulationVariables.h"
 
 namespace Ui {
 class MainWindow;
@@ -49,12 +50,18 @@ private slots:
 
     void on_checkBox_2_clicked(bool checked);
 
+    void on_checkBox_3_clicked(bool checked);
+
+    void on_checkBox_4_clicked(bool checked);
+
 private:
     void moveItemToScene(std::vector<sample> samples);
     void addItemToScene(std::vector<sample> samples);
     simulation sim;
     bool renderAnts;
-    bool renderValues;
+    bool renderExploration;
+    bool renderHomePheromone;
+    bool renderFoodPheromone;
     QTimer *timer;
     int speed;
     unsigned int antNum;

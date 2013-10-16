@@ -10,6 +10,7 @@ public:
     QPoint position;
     QPoint previousPosition;
     double hungry;
+    double life;
     sample();
     void action();
 };

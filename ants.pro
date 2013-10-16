@@ -21,6 +21,7 @@ HEADERS  += mainwindow.h \
     simulation.h \
     grid.h \
     sample.h \
-    randomGenerator.h
+    randomGenerator.h \
+    simulationVariables.h
 
 FORMS    += mainwindow.ui
