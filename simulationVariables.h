@@ -1,6 +1,9 @@
 #ifndef SIMULATIONVARIABLES_H
 #define SIMULATIONVARIABLES_H
 
+/*
+ *variables that used throughout the program.
+ */
 #define sizeX 500.0
 #define sizeY 500.0
 #define nestX 6

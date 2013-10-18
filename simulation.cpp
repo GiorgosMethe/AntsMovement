@@ -1,5 +1,5 @@
 #include "simulation.h"
-#include "omp.h"
+
 simulation::simulation()
 {
     this->world.isInitialized = false;

@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     //initialization phase
+    //variables
     this->speed = 0;
     this->sim.setSampleNum(200);
     this->sim.stepCount = 0;
@@ -19,10 +20,11 @@ MainWindow::MainWindow(QWidget *parent) :
     this->renderHomePheromone = true;
     this->_diffusion = false;
     this->_evaporation = false;
-    //end
 
     //initialize gui
     ui->setupUi(this);
+
+    // initialization of the main rendering scene
     QImage rendering(sizeX-2, sizeY-2, QImage::Format_RGB16);
     rendering.fill(Qt::black);
     scene = new QGraphicsScene (this);
@@ -30,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->addPixmap(pixmap);
     ui->graphicsView->setScene(scene);
 
+    // exploration rendering initialization
     QImage imageExplore(108, 108, QImage::Format_RGB16);
     imageExplore.fill(Qt::black);
     scene = new QGraphicsScene (this);
@@ -40,10 +43,12 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->addPixmap(pixmap);
     ui->graphicsView_4->setScene(scene);
 
+    // progress bar initialization
     ui->progressBar->setMaximum(100);
     ui->progressBar->setMinimum(0);
     ui->progressBar->setValue(100);
 
+    //home pheromone rendering initialization
     QImage imageHome(218, 218, QImage::Format_RGB16);
     imageHome.fill(Qt::black);
     scene = new QGraphicsScene (this);
@@ -51,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->addPixmap(pixmap);
     ui->graphicsView_2->setScene(scene);
 
+    //food pheromone rendering initialization
     QImage imageFood(218, 218, QImage::Format_RGB16);
     imageFood.fill(Qt::black);
     scene = new QGraphicsScene (this);
@@ -70,6 +76,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+// start button
+// simulation is initialized if it was already
+// timer starts
 void MainWindow::on_pushButtonStart_clicked()
 {
     if(this->sim.world.isInitialized)
@@ -83,6 +92,37 @@ void MainWindow::on_pushButtonStart_clicked()
     }
 }
 
+// pause button
+// timer stops
+void MainWindow::on_pushButtonPause_clicked()
+{
+    timer->stop();
+}
+
+// reset button
+// end simulation
+// initialize again the gui and the simulation
+void MainWindow::on_pushButtonReset_clicked()
+{
+
+    this->sim.world.destroyMap();
+    timer->stop();
+    this->rendering = QImage(sizeX-2, sizeY-2, QImage::Format_RGB16);
+    this->rendering.fill(Qt::black);
+    scene->clear();
+    pixmap = QPixmap::fromImage(this->rendering);
+    scene->addPixmap(pixmap);
+    ui->graphicsView->setScene(scene);
+    QGraphicsRectItem* nest = new QGraphicsRectItem(nestX, nestY, nestSize, nestSize);
+    nest->setBrush(QBrush(Qt::white));
+    ui->graphicsView->scene()->addItem(nest);
+    QGraphicsRectItem* food = new QGraphicsRectItem(foodX, foodY , foodSize, foodSize);
+    food->setBrush(QBrush(Qt::cyan));
+    ui->graphicsView->scene()->addItem(food);
+
+}
+
+// add items to the scene, food, nest and the ants
 void MainWindow::addItemToScene()
 {
     nest = new QGraphicsRectItem(nestX, nestY, nestSize, nestSize);
@@ -100,6 +140,7 @@ void MainWindow::addItemToScene()
     return;
 }
 
+//moves items in the scene
 void MainWindow::moveItemToScene()
 {
     for(int i = 0; i < ui->graphicsView->scene()->items().size(); ++i)
@@ -127,31 +168,8 @@ void MainWindow::moveItemToScene()
     return;
 }
 
-void MainWindow::on_pushButtonPause_clicked()
-{
-    timer->stop();
-}
-
-void MainWindow::on_pushButtonReset_clicked()
-{
-    //end simulation
-    this->sim.world.destroyMap();
-    timer->stop();
-    this->rendering = QImage(sizeX-2, sizeY-2, QImage::Format_RGB16);
-    this->rendering.fill(Qt::black);
-    scene->clear();
-    pixmap = QPixmap::fromImage(this->rendering);
-    scene->addPixmap(pixmap);
-    ui->graphicsView->setScene(scene);
-    QGraphicsRectItem* nest = new QGraphicsRectItem(nestX, nestY, nestSize, nestSize);
-    nest->setBrush(QBrush(Qt::white));
-    ui->graphicsView->scene()->addItem(nest);
-    QGraphicsRectItem* food = new QGraphicsRectItem(foodX, foodY , foodSize, foodSize);
-    food->setBrush(QBrush(Qt::cyan));
-    ui->graphicsView->scene()->addItem(food);
-
-}
-
+// in every timer step this function is called
+// we ran a step of the simulation
 void MainWindow::update()
 {
     if(this->sim.world.isInitialized)
@@ -168,11 +186,14 @@ void MainWindow::update()
     }
 }
 
+//updates scenes for the exploration scene, the food and the home pheromone visualizations
 void MainWindow::updateRendering()
 {
+    //render ants
     if(this->renderAnts)
         this->moveItemToScene();
 
+    //render exploration
     if(this->renderExploration){
         this->imageExplore = QImage(108, 108, QImage::Format_RGB16);
         int dx = 2;
@@ -195,6 +216,8 @@ void MainWindow::updateRendering()
         scene3->addPixmap(pixmap);
         ui->graphicsView_4->setScene(scene3);
     }
+
+    //render food pheromone
     if(this->renderFoodPheromone){
         this->imageFood = QImage(218, 218, QImage::Format_RGB16);
         int dx = 2;
@@ -221,6 +244,7 @@ void MainWindow::updateRendering()
         ui->graphicsView_2->setScene(scene1);
     }
 
+    //render home pheromone
     if(this->renderHomePheromone){
         this->imageHome = QImage(218, 218, QImage::Format_RGB16);
         int dx = 2;
@@ -294,8 +318,8 @@ void MainWindow::on_checkBox_6_clicked(bool checked)
     this->_evaporation = checked;
 }
 
-
+// not used
 void MainWindow::on_progressBar_valueChanged(int value)
 {
-
+    //nothing
 }
