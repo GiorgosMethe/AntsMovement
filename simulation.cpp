@@ -71,39 +71,39 @@ void simulation::agentActionSelection(sample &tmp)
 
 void simulation::greedyAgentAction(sample &tmp)
 {
-//    double max = 0.0;
-//    int dx = 0, dy = 0;
-//    if(tmp.hungry > hungry_threshold)
-//    {
-//        for(int x = -1; x < 2; x++)
-//            for(int y = -1; y < 2; y++)
-//                if(y!=0 && x!=0 && this->world.food_pheromone[tmp.position.x()+x][tmp.position.y()+y] > max){
-//                    max = this->world.food_pheromone[tmp.position.x()+x][tmp.position.y()+y];
-//                    dx = x;
-//                    dy = y;
-//                }
-//    }
-//    else
-//    {
-//        for(int x = -1; x < 2; x++)
-//            for(int y = -1; y < 2; y++)
-//                if(y!=0 && x!=0 && this->world.home_pheromone[tmp.position.x()+x][tmp.position.y()+y] > max){
-//                    max = this->world.home_pheromone[tmp.position.x()+x][tmp.position.y()+y];
-//                    dx = x;
-//                    dy = y;
-//                }
-//    }
-//    if(max != 0.0)
-//    {
-//        tmp.previousPosition.setX(tmp.position.x());
-//        tmp.previousPosition.setY(tmp.position.y());
-//        if(tmp.position.x() + dx < this->worldWidth - 5 && tmp.position.x() + dx > 5)
-//            tmp.position.setX(tmp.position.x() + dx);
-//        if(tmp.position.y() + dy < this->worldHeight - 5 && tmp.position.y() + dy > 5)
-//            tmp.position.setY(tmp.position.y() + dy);
-//    }
-//    else
-//    {
+    double max = 0.0;
+    int dx = 0, dy = 0;
+    if(tmp.hungry > hungry_threshold)
+    {
+        for(int x = -1; x < 2; x++)
+            for(int y = -1; y < 2; y++)
+                if(y!=0 && x!=0 && this->world.food_pheromone[tmp.position.x()+x][tmp.position.y()+y] > max){
+                    max = this->world.food_pheromone[tmp.position.x()+x][tmp.position.y()+y];
+                    dx = x;
+                    dy = y;
+                }
+    }
+    else
+    {
+        for(int x = -1; x < 2; x++)
+            for(int y = -1; y < 2; y++)
+                if(y!=0 && x!=0 && this->world.home_pheromone[tmp.position.x()+x][tmp.position.y()+y] > max){
+                    max = this->world.home_pheromone[tmp.position.x()+x][tmp.position.y()+y];
+                    dx = x;
+                    dy = y;
+                }
+    }
+    if(max != 0.0)
+    {
+        tmp.previousPosition.setX(tmp.position.x());
+        tmp.previousPosition.setY(tmp.position.y());
+        if(tmp.position.x() + dx < this->worldWidth - 5 && tmp.position.x() + dx > 5)
+            tmp.position.setX(tmp.position.x() + dx);
+        if(tmp.position.y() + dy < this->worldHeight - 5 && tmp.position.y() + dy > 5)
+            tmp.position.setY(tmp.position.y() + dy);
+    }
+    else
+    {
         int x = floor(unifRand() / (1.00 / 3.00));
         int y = floor(unifRand() / (1.00 / 3.00));
         tmp.previousPosition.setX(tmp.position.x());
@@ -114,8 +114,8 @@ void simulation::greedyAgentAction(sample &tmp)
             tmp.position.setY(tmp.position.y() + y - 1);
 
         std::cout << x << "," << y << std::endl;
-//    }
-//    return;
+    }
+    return;
 }
 
 void simulation::randomAgentAction(sample &tmp)
