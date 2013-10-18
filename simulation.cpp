@@ -22,6 +22,8 @@ void simulation::init()
         tmp.hungry = 1.0;
         this->world.addSample(tmp);
     }
+    this->exploreRatio = 0.0;
+    this->hungerLevel = 0.0;
     this->max_food_pheromone = 1000.0;
     this->max_home_pheromone = 1000.0;
 }
@@ -29,10 +31,13 @@ void simulation::init()
 void simulation::step()
 {
     this->stepCount++;
+    this->hungerLevel = 0.0;
     for(unsigned int i = 0; i < this->world.sampleSet.size(); ++i)
     {
         this->agentAction(this->world.sampleSet.at(i));
+        this->hungerLevel += this->world.sampleSet.at(i).hungry;
     }
+    this->hungerLevel /= (double) this->world.sampleSet.size();
     return;
 }
 
@@ -42,11 +47,14 @@ void simulation::agentAction(sample &tmp)
     this->droppingPheromone(tmp.position);
     this->agentActionSelection(tmp);
     this->agentPheromoneUpdate(tmp);
-    this->world.explored[tmp.position.x()][tmp.position.y()] = true;
-
+    if(this->world.explored[tmp.position.x()][tmp.position.y()] == false)
+    {
+        this->exploreRatio += 1 / (this->worldWidth * this->worldHeight);
+        this->world.explored[tmp.position.x()][tmp.position.y()] = true;
+    }
     double a = sqrt(pow(tmp.position.x() - tmp.previousPosition.x(),2) + pow(tmp.position.y() - tmp.previousPosition.y(),2));
     if(a > 1.41422){
-        std::cout << "ERROR " << a <<std::endl;
+        std::cout << "ERRORERRORERRORERRORERRORERRORERRORERRORERROR " << a <<std::endl;
     }
     return;
 }
@@ -112,8 +120,6 @@ void simulation::greedyAgentAction(sample &tmp)
             tmp.position.setX(tmp.position.x() + x - 1);
         if(tmp.position.y() + y - 1 < this->worldHeight - 5 && tmp.position.y() + y - 1 > 5)
             tmp.position.setY(tmp.position.y() + y - 1);
-
-        std::cout << x << "," << y << std::endl;
     }
     return;
 }

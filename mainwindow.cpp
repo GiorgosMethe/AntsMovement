@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->addPixmap(pixmap);
     ui->graphicsView->setScene(scene);
 
-    QImage imageExplore(178, 178, QImage::Format_RGB16);
+    QImage imageExplore(108, 108, QImage::Format_RGB16);
     imageExplore.fill(Qt::black);
     scene = new QGraphicsScene (this);
     scene1 = new QGraphicsScene (this);
@@ -39,6 +39,10 @@ MainWindow::MainWindow(QWidget *parent) :
     pixmap = QPixmap::fromImage(imageExplore);
     scene->addPixmap(pixmap);
     ui->graphicsView_4->setScene(scene);
+
+    ui->progressBar->setMaximum(100);
+    ui->progressBar->setMinimum(0);
+    ui->progressBar->setValue(100);
 
     QImage imageHome(218, 218, QImage::Format_RGB16);
     imageHome.fill(Qt::black);
@@ -154,6 +158,7 @@ void MainWindow::update()
     {
         std::cout << "simulation step: " << this->sim.stepCount << std::endl;
         this->sim.step();
+        ui->progressBar->setValue(round(100*this->sim.hungerLevel));
         if(this->_diffusion)
             this->sim.diffusion();
         if(this->_evaporation)
@@ -169,7 +174,7 @@ void MainWindow::updateRendering()
         this->moveItemToScene();
 
     if(this->renderExploration){
-        this->imageExplore = QImage(178, 178, QImage::Format_RGB16);
+        this->imageExplore = QImage(108, 108, QImage::Format_RGB16);
         int dx = 2;
         int dy = 2;
         this->imageExplore.fill(Qt::black);
@@ -177,9 +182,9 @@ void MainWindow::updateRendering()
             for(int y = 0; y < sizeY; y+=dy){
                 if(this->sim.world.explored[x][y]){
                     double i = 0, j = 0;
-                    i = 177.00 * ((x + 1.00) / sizeX);
+                    i = 108.00 * ((x + 1.00) / sizeX);
                     int ii = round(i);
-                    j = 177.00 * ((y + 1.00) / sizeY);
+                    j = 108.00 * ((y + 1.00) / sizeY);
                     int jj = round(j);
                     this->imageExplore.setPixel(ii,jj,qRgb(255,0,0));
                 }
@@ -287,4 +292,10 @@ void MainWindow::on_checkBox_5_clicked(bool checked)
 void MainWindow::on_checkBox_6_clicked(bool checked)
 {
     this->_evaporation = checked;
+}
+
+
+void MainWindow::on_progressBar_valueChanged(int value)
+{
+
 }

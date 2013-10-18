@@ -29,6 +29,9 @@ public:
     QPoint food;
     QPoint nest;
 
+    double exploreRatio;
+    double hungerLevel;
+
     void evaporation();
     void diffusion();
 

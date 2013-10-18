@@ -66,6 +66,8 @@ private slots:
 
     void on_checkBox_6_clicked(bool checked);
 
+    void on_progressBar_valueChanged(int value);
+
 private:
     QImage imageExplore;
     QImage rendering;

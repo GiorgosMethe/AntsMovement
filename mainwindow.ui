@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>964</width>
-    <height>562</height>
+    <width>943</width>
+    <height>566</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,8 +18,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>120</y>
-      <width>171</width>
+      <y>130</y>
+      <width>181</width>
       <height>22</height>
      </rect>
     </property>
@@ -37,7 +37,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>100</y>
+      <y>110</y>
       <width>46</width>
       <height>13</height>
      </rect>
@@ -50,8 +50,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>160</y>
-      <width>171</width>
+      <y>170</y>
+      <width>181</width>
       <height>22</height>
      </rect>
     </property>
@@ -75,7 +75,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>150</y>
+      <y>160</y>
       <width>46</width>
       <height>13</height>
      </rect>
@@ -88,8 +88,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>180</y>
-      <width>231</width>
+      <y>200</y>
+      <width>181</width>
       <height>21</height>
      </rect>
     </property>
@@ -104,8 +104,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>200</y>
-      <width>231</width>
+      <y>220</y>
+      <width>181</width>
       <height>21</height>
      </rect>
     </property>
@@ -119,7 +119,7 @@
    <widget class="QGraphicsView" name="graphicsView">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>200</x>
       <y>10</y>
       <width>500</width>
       <height>500</height>
@@ -144,7 +144,7 @@
    <widget class="QGraphicsView" name="graphicsView_2">
     <property name="geometry">
      <rect>
-      <x>720</x>
+      <x>710</x>
       <y>30</y>
       <width>220</width>
       <height>220</height>
@@ -154,7 +154,7 @@
    <widget class="QGraphicsView" name="graphicsView_3">
     <property name="geometry">
      <rect>
-      <x>720</x>
+      <x>710</x>
       <y>290</y>
       <width>220</width>
       <height>220</height>
@@ -164,9 +164,9 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>720</x>
+      <x>710</x>
       <y>10</y>
-      <width>131</width>
+      <width>221</width>
       <height>20</height>
      </rect>
     </property>
@@ -177,9 +177,9 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>720</x>
+      <x>710</x>
       <y>270</y>
-      <width>131</width>
+      <width>221</width>
       <height>20</height>
      </rect>
     </property>
@@ -192,7 +192,7 @@
      <rect>
       <x>11</x>
       <y>11</y>
-      <width>171</width>
+      <width>181</width>
       <height>23</height>
      </rect>
     </property>
@@ -205,7 +205,7 @@
      <rect>
       <x>11</x>
       <y>40</y>
-      <width>171</width>
+      <width>181</width>
       <height>23</height>
      </rect>
     </property>
@@ -218,7 +218,7 @@
      <rect>
       <x>11</x>
       <y>69</y>
-      <width>171</width>
+      <width>181</width>
       <height>23</height>
      </rect>
     </property>
@@ -230,9 +230,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>330</y>
-      <width>180</width>
-      <height>180</height>
+      <y>340</y>
+      <width>110</width>
+      <height>110</height>
      </rect>
     </property>
    </widget>
@@ -240,8 +240,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>310</y>
-      <width>81</width>
+      <y>320</y>
+      <width>181</width>
       <height>16</height>
      </rect>
     </property>
@@ -253,13 +253,13 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>220</y>
-      <width>231</width>
+      <y>240</y>
+      <width>181</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>Visualize food pheromone</string>
+     <string>Visualize food phermn.</string>
     </property>
     <property name="checked">
      <bool>true</bool>
@@ -269,13 +269,13 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>240</y>
-      <width>231</width>
+      <y>260</y>
+      <width>181</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>Visualize home pheromone</string>
+     <string>Visualize home phermn.</string>
     </property>
     <property name="checked">
      <bool>true</bool>
@@ -285,8 +285,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>280</y>
-      <width>101</width>
+      <y>300</y>
+      <width>191</width>
       <height>17</height>
      </rect>
     </property>
@@ -298,13 +298,42 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>260</y>
-      <width>91</width>
+      <y>280</y>
+      <width>181</width>
       <height>17</height>
      </rect>
     </property>
     <property name="text">
      <string>Use diffusion</string>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="progressBar">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>480</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>24</number>
+    </property>
+    <property name="format">
+     <string>%p%</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>460</y>
+      <width>181</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Hungry level:</string>
     </property>
    </widget>
   </widget>
@@ -313,8 +342,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>964</width>
-     <height>21</height>
+     <width>943</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
