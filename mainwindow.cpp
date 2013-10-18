@@ -96,7 +96,7 @@ void MainWindow::addItemToScene()
 
 void MainWindow::moveItemToScene()
 {
-    for(unsigned int i = 0; i < ui->graphicsView->scene()->items().size(); ++i)
+    for(int i = 0; i < ui->graphicsView->scene()->items().size(); ++i)
     {
         ui->graphicsView->scene()->items().pop_back();
     }
@@ -155,7 +155,6 @@ void MainWindow::update()
         if(this->renderAnts)
             this->moveItemToScene();
     }
-
     if(this->renderExploration && this->sim.world.isInitialized)
     {
         this->imageExplore = QImage(235, 175, QImage::Format_RGB16);

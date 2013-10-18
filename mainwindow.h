@@ -5,8 +5,9 @@
 #include <QGraphicsScene>
 #include <QtCore>
 #include <QtGui>
+#include <math.h>
 #include <QTimer>
-#include <sample.h>
+#include "sample.h"
 #include "grid.h"
 #include "simulation.h"
 #include "ui_mainwindow.h"
@@ -53,6 +54,13 @@ private slots:
     void on_checkBox_3_clicked(bool checked);
 
     void on_checkBox_4_clicked(bool checked);
+
+#if _WIN32
+    int round(double value)
+    {
+        return floor(value+0.5);
+    }
+#endif
 
 private:
     QImage imageExplore;
