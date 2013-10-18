@@ -29,6 +29,9 @@ public:
     QPoint food;
     QPoint nest;
 
+    void evaporation();
+    void diffusion();
+
     double max_food_pheromone;
     double min_food_pheromone;
 
@@ -61,8 +64,6 @@ private:
     int sampleNum;
     int worldWidth;
     int worldHeight;
-    void updateHomePheromone();
-    void updateFoodPheromone();
 
     QPoint world2table(QPoint wP)
     {

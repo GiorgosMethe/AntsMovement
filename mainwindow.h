@@ -62,6 +62,10 @@ private slots:
     }
 #endif
 
+    void on_checkBox_5_clicked(bool checked);
+
+    void on_checkBox_6_clicked(bool checked);
+
 private:
     QImage imageExplore;
     QImage rendering;
@@ -73,11 +77,14 @@ private:
     QGraphicsRectItem* food;
     void moveItemToScene();
     void addItemToScene();
+    void updateRendering();
     simulation sim;
     bool renderAnts;
     bool renderExploration;
     bool renderHomePheromone;
     bool renderFoodPheromone;
+    bool _evaporation;
+    bool _diffusion;
     QTimer *timer;
     int speed;
     unsigned int antNum;
