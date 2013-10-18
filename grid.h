@@ -54,6 +54,7 @@ public:
         delete [] this->home_pheromone;
         delete [] this->explored;
         this->isInitialized = false;
+        sampleSet.clear();
         return;
     }
 

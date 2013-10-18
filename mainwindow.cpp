@@ -12,18 +12,45 @@ MainWindow::MainWindow(QWidget *parent) :
     this->sim.stepCount = 0;
     this->sim.setFoodPos(QPoint(foodX, foodY));
     this->sim.setNestPos(QPoint(nestX, nestY));
-    this->sim.setWorldDim(sizeX / 2, sizeY / 2);
+    this->sim.setWorldDim(sizeX, sizeY);
     this->renderAnts = true;
-    this->renderExploration = false;
+    this->renderExploration = true;
+    this->renderFoodPheromone = true;
+    this->renderHomePheromone = true;
     //end
 
     //initialize gui
     ui->setupUi(this);
-    scene = new QGraphicsScene(this);
-    ui->graphicsView->setFixedSize(sizeX, sizeY);
-    ui->graphicsView->setFocusPolicy(Qt::NoFocus);
+    QImage rendering(sizeX, sizeY, QImage::Format_RGB16);
+    rendering.fill(Qt::black);
+    scene = new QGraphicsScene (this);
+    QPixmap pixmap = QPixmap::fromImage(rendering);
+    scene->addPixmap(pixmap);
     ui->graphicsView->setScene(scene);
 
+    QImage imageExplore(235, 175, QImage::Format_RGB16);
+    imageExplore.fill(Qt::black);
+    scene = new QGraphicsScene (this);
+    scene1 = new QGraphicsScene (this);
+    scene2 = new QGraphicsScene (this);
+    scene3 = new QGraphicsScene (this);
+    pixmap = QPixmap::fromImage(imageExplore);
+    scene->addPixmap(pixmap);
+    ui->graphicsView_4->setScene(scene);
+
+    QImage imageHome(245, 195, QImage::Format_RGB16);
+    imageHome.fill(Qt::black);
+    scene = new QGraphicsScene (this);
+    pixmap = QPixmap::fromImage(imageHome);
+    scene->addPixmap(pixmap);
+    ui->graphicsView_2->setScene(scene);
+
+    QImage imageFood(245, 195, QImage::Format_RGB16);
+    imageFood.fill(Qt::black);
+    scene = new QGraphicsScene (this);
+    pixmap = QPixmap::fromImage(imageFood);
+    scene->addPixmap(pixmap);
+    ui->graphicsView_3->setScene(scene);
 
     //set up timer
     timer = new QTimer(this);
@@ -39,37 +66,57 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButtonStart_clicked()
 {
-    timer->start(this->speed);
-    this->sim.init();
-    this->addItemToScene(this->sim.world.sampleSet);
-    this->sim.stepCount = 0;
+    if(this->sim.world.isInitialized)
+        timer->start(this->speed);
+    else
+    {
+        timer->start(this->speed);
+        this->sim.init();
+        this->addItemToScene();
+        this->sim.stepCount = 0;
+    }
 }
 
-void MainWindow::addItemToScene(std::vector<sample> samples)
+void MainWindow::addItemToScene()
 {
-    QGraphicsRectItem* nest = new QGraphicsRectItem(nestX, nestY, nestSize, nestSize);
-    nest->setBrush(QBrush(Qt::black));
+    nest = new QGraphicsRectItem(nestX, nestY, nestSize, nestSize);
+    nest->setBrush(QBrush(Qt::white));
     ui->graphicsView->scene()->addItem(nest);
-    QGraphicsRectItem* food = new QGraphicsRectItem(foodX, foodY, foodSize, foodSize);
+    food = new QGraphicsRectItem(foodX, foodY , foodSize, foodSize);
     food->setBrush(QBrush(Qt::cyan));
     ui->graphicsView->scene()->addItem(food);
-    for(unsigned int i = 0; i < samples.size(); ++i)
+    for(unsigned int i = 0; i < this->sim.world.sampleSet.size(); ++i)
     {
-        QGraphicsRectItem* item1 = new QGraphicsRectItem(samples.at(i).position.x(), samples.at(i).position.y(), sampleSize, sampleSize);
-        item1->setBrush(QBrush(Qt::red));
-        ui->graphicsView->scene()->addItem(item1);
+        ant = new QGraphicsRectItem(this->sim.world.sampleSet.at(i).position.x(), this->sim.world.sampleSet.at(i).position.y(), sampleSize, sampleSize);
+        ant->setBrush(QBrush(Qt::red));
+        ui->graphicsView->scene()->addItem(ant);
     }
     return;
 }
 
-void MainWindow::moveItemToScene(std::vector<sample> samples)
+void MainWindow::moveItemToScene()
 {
-    for(unsigned int i = 0; i < samples.size(); ++i)
+    for(unsigned int i = 0; i < ui->graphicsView->scene()->items().size(); ++i)
     {
-        sample tmp = samples.at(i);
-        int dx = tmp.position.x() - ui->graphicsView->scene()->items().at(tmp.id)->pos().x();
-        int dy = tmp.position.y() - ui->graphicsView->scene()->items().at(tmp.id)->pos().y();
-        ui->graphicsView->scene()->items().at(tmp.id)->moveBy(dx, dy);
+        ui->graphicsView->scene()->items().pop_back();
+    }
+    this->rendering = QImage(sizeX, sizeY, QImage::Format_RGB16);
+    this->rendering.fill(Qt::black);
+    scene->clear();
+    pixmap = QPixmap::fromImage(this->rendering);
+    scene->addPixmap(pixmap);
+    ui->graphicsView->setScene(scene);
+    nest = new QGraphicsRectItem(nestX, nestY, nestSize, nestSize);
+    nest->setBrush(QBrush(Qt::white));
+    ui->graphicsView->scene()->addItem(nest);
+    food = new QGraphicsRectItem(foodX, foodY , foodSize, foodSize);
+    food->setBrush(QBrush(Qt::cyan));
+    ui->graphicsView->scene()->addItem(food);
+    for(unsigned int i = 0; i < this->sim.world.sampleSet.size(); ++i)
+    {
+        ant = new QGraphicsRectItem(this->sim.world.sampleSet.at(i).position.x(), this->sim.world.sampleSet.at(i).position.y(), sampleSize, sampleSize);
+        ant->setBrush(QBrush(Qt::red));
+        ui->graphicsView->scene()->addItem(ant);
     }
     return;
 }
@@ -82,26 +129,39 @@ void MainWindow::on_pushButtonPause_clicked()
 void MainWindow::on_pushButtonReset_clicked()
 {
     //end simulation
-    this->sim.~simulation();
+    this->sim.world.destroyMap();
+    timer->stop();
+    this->rendering = QImage(sizeX, sizeY, QImage::Format_RGB16);
+    this->rendering.fill(Qt::black);
+    scene->clear();
+    pixmap = QPixmap::fromImage(this->rendering);
+    scene->addPixmap(pixmap);
+    ui->graphicsView->setScene(scene);
+    QGraphicsRectItem* nest = new QGraphicsRectItem(nestX, nestY, nestSize, nestSize);
+    nest->setBrush(QBrush(Qt::white));
+    ui->graphicsView->scene()->addItem(nest);
+    QGraphicsRectItem* food = new QGraphicsRectItem(foodX, foodY , foodSize, foodSize);
+    food->setBrush(QBrush(Qt::cyan));
+    ui->graphicsView->scene()->addItem(food);
+
 }
 
 void MainWindow::update()
 {
-
     if(this->sim.world.isInitialized)
     {
         std::cout << "simulation step: " << this->sim.stepCount << std::endl;
         this->sim.step();
         if(this->renderAnts)
-            this->moveItemToScene(this->sim.world.sampleSet);
+            this->moveItemToScene();
     }
 
     if(this->renderExploration && this->sim.world.isInitialized)
     {
-        QImage imageFood(235, 175, QImage::Format_RGB16);
+        this->imageExplore = QImage(235, 175, QImage::Format_RGB16);
         int dx = 2;
         int dy = 2;
-        imageFood.fill(Qt::black);
+        this->imageExplore.fill(Qt::black);
         for(int x = 0; x < sizeX; x+=dx)
         {
             for(int y = 0; y < sizeY; y+=dy)
@@ -113,67 +173,75 @@ void MainWindow::update()
                     int ii = round(i);
                     j = 175.00 * ((y + 1.00) / sizeY);
                     int jj = round(j);
-                    imageFood.setPixel(ii,jj,qRgb(255,0,0));
+                    this->imageExplore.setPixel(ii,jj,qRgb(255,0,0));
                 }
 
             }
         }
-        scene = new QGraphicsScene (this);
-        QPixmap pixmap = QPixmap::fromImage(imageFood);
-        scene->addPixmap(pixmap);
-        ui->graphicsView_4->setScene(scene);
+        pixmap = QPixmap::fromImage(this->imageExplore);
+        scene3->clear();
+        scene3->addPixmap(pixmap);
+        ui->graphicsView_4->setScene(scene3);
     }
 
     if(this->renderFoodPheromone && this->sim.world.isInitialized)
     {
-        QImage imageFood(245, 195, QImage::Format_RGB16);
+        this->imageFood = QImage(245, 195, QImage::Format_RGB16);
         int dx = 2;
         int dy = 2;
-        imageFood.fill(Qt::black);
+        this->imageFood.fill(Qt::black);
         for(int x = 0; x < sizeX; x+=dx)
         {
             for(int y = 0; y < sizeY; y+=dy)
             {
-                double i = 0, j = 0;
-                i = 244.00 * ((x + 1.00) / sizeX);
-                int ii = round(i);
-                j = 194.00 * ((y + 1.00) / sizeY);
-                int jj = round(j);
-                double red = 255.0 * (this->sim.world.food_pheromone[x][y] / this->sim.max_food_pheromone);
-                int red_i = round(red);
-                imageFood.setPixel(ii,jj,qRgb(red_i,0,0));
+                if(this->sim.world.food_pheromone[x][y] > 0.00)
+                {
+                    double i = 0, j = 0;
+                    i = 244.00 * ((x + 1.00) / sizeX);
+                    int ii = round(i);
+                    j = 194.00 * ((y + 1.00) / sizeY);
+                    int jj = round(j);
+                    double red = 255.0 * (this->sim.world.food_pheromone[x][y] / this->sim.max_food_pheromone);
+                    int red_i = round(red);
+                    if(red_i < 50) red_i = 50;
+                    this->imageFood.setPixel(ii,jj,qRgb(red_i,red_i,red_i));
+                }
             }
         }
-        scene = new QGraphicsScene (this);
-        QPixmap pixmap = QPixmap::fromImage(imageFood);
-        scene->addPixmap(pixmap);
-        ui->graphicsView_2->setScene(scene);
+        pixmap = QPixmap::fromImage(this->imageFood);
+        scene1->clear();
+        scene1->addPixmap(pixmap);
+        ui->graphicsView_2->setScene(scene1);
     }
 
     if(this->renderHomePheromone && this->sim.world.isInitialized)
     {
-        QImage imageHome(245, 195, QImage::Format_RGB16);
+        this->imageHome = QImage(245, 195, QImage::Format_RGB16);
         int dx = 2;
         int dy = 2;
-        imageHome.fill(Qt::black);
+        this->imageHome.fill(Qt::black);
         for(int x = 0; x < sizeX; x+=dx)
         {
             for(int y = 0; y < sizeY; y+=dy)
             {
-                double i = 0, j = 0;
-                i = 244.00 * ((x + 1.00) / sizeX);
-                int ii = round(i);
-                j = 194.00 * ((y + 1.00) / sizeY);
-                int jj = ceil(j);
-                double blue = 255.0 * (this->sim.world.food_pheromone[x][y] / this->sim.max_food_pheromone);
-                int blue_i = round(blue);
-                imageHome.setPixel(ii,jj,qRgb(0,0,blue_i));
+                if(this->sim.world.home_pheromone[x][y] > 0.00)
+                {
+                    double i = 0, j = 0;
+                    i = 244.00 * ((x + 1.00) / sizeX);
+                    int ii = round(i);
+                    j = 194.00 * ((y + 1.00) / sizeY);
+                    int jj = ceil(j);
+                    double blue = 255.0 * (this->sim.world.home_pheromone[x][y] / this->sim.max_home_pheromone);
+                    int blue_i = round(blue);
+                    if(blue_i < 10) blue_i = 10;
+                    this->imageHome.setPixel(ii,jj,qRgb(blue_i,blue_i,blue_i));
+                }
             }
         }
-        scene = new QGraphicsScene (this);
-        QPixmap pixmap = QPixmap::fromImage(imageHome);
-        scene->addPixmap(pixmap);
-        ui->graphicsView_3->setScene(scene);
+        pixmap = QPixmap::fromImage(this->imageHome);
+        scene2->clear();
+        scene2->addPixmap(pixmap);
+        ui->graphicsView_3->setScene(scene2);
     }
 }
 

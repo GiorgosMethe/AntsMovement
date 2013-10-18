@@ -112,6 +112,9 @@
     <property name="text">
      <string>Visualize exploration</string>
     </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QGraphicsView" name="graphicsView">
     <property name="geometry">
@@ -168,7 +171,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Home pheromone:</string>
+     <string>Food pheromone:</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
@@ -181,7 +184,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Food pheromone:</string>
+     <string>Home pheromone:</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonStart">
@@ -258,6 +261,9 @@
     <property name="text">
      <string>Visualize food pheromone</string>
     </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QCheckBox" name="checkBox_4">
     <property name="geometry">
@@ -270,6 +276,9 @@
     </property>
     <property name="text">
      <string>Visualize home pheromone</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>

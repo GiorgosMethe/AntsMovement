@@ -57,13 +57,12 @@ public:
     }
 
 private:
+    // simulation
     int sampleNum;
     int worldWidth;
     int worldHeight;
-
-    void action();
-
-    void updatePheromone();
+    void updateHomePheromone();
+    void updateFoodPheromone();
 
     QPoint world2table(QPoint wP)
     {
@@ -79,6 +78,15 @@ private:
         double newValue;
     };
     std::vector<change> temp;
+
+    // Agent
+    void droppingPheromone(QPoint position);
+    void agentAction(sample &agent);
+    void randomAgentAction(sample &agent);
+    void agentActionSelection(sample &tmp);
+    void agentPheromoneUpdate(sample tmp);
+    void updateHunger(sample &tmp);
+    void greedyAgentAction(sample &tmp);
 };
 
 #endif // SIMULATION_H

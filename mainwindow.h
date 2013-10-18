@@ -55,8 +55,16 @@ private slots:
     void on_checkBox_4_clicked(bool checked);
 
 private:
-    void moveItemToScene(std::vector<sample> samples);
-    void addItemToScene(std::vector<sample> samples);
+    QImage imageExplore;
+    QImage rendering;
+    QImage imageFood;
+    QImage imageHome;
+    QPixmap pixmap;
+    QGraphicsRectItem* ant;
+    QGraphicsRectItem* nest;
+    QGraphicsRectItem* food;
+    void moveItemToScene();
+    void addItemToScene();
     simulation sim;
     bool renderAnts;
     bool renderExploration;
@@ -67,6 +75,9 @@ private:
     unsigned int antNum;
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
+    QGraphicsScene *scene1;
+    QGraphicsScene *scene2;
+    QGraphicsScene *scene3;
     QGraphicsPixmapItem *image;
     QGraphicsRectItem *rectangle;
     QGraphicsEllipseItem *ellipse;
