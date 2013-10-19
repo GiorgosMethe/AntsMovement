@@ -30,6 +30,8 @@ public:
 
     int stepCount;
 
+    bool obstacle;
+
     QPoint food;
     QPoint nest;
 
@@ -84,6 +86,7 @@ private:
         return tmp;
     }
 
+    bool isObstacle(int i, int j);
     struct change
     {
         QPoint pos;

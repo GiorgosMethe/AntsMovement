@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->renderHomePheromone = true;
     this->_diffusion = false;
     this->_evaporation = false;
+    this->obstacle_render = false;
 
     //initialize gui
     ui->setupUi(this);
@@ -89,6 +90,7 @@ void MainWindow::on_pushButtonStart_clicked()
         this->sim.init();
         this->addItemToScene();
         this->sim.stepCount = 0;
+        this->sim.obstacle = this->obstacle_render;
     }
 }
 
@@ -119,6 +121,12 @@ void MainWindow::on_pushButtonReset_clicked()
     QGraphicsRectItem* food = new QGraphicsRectItem(foodX, foodY , foodSize, foodSize);
     food->setBrush(QBrush(Qt::cyan));
     ui->graphicsView->scene()->addItem(food);
+    if(this->obstacle_render)
+    {
+        QGraphicsRectItem* obstacle = new QGraphicsRectItem(obstacleX, obstacleY , obstacleSizeX, obstacleSizeY);
+        obstacle->setBrush(QBrush(Qt::gray));
+        ui->graphicsView->scene()->addItem(obstacle);
+    }
 
 }
 
@@ -131,6 +139,12 @@ void MainWindow::addItemToScene()
     food = new QGraphicsRectItem(foodX, foodY , foodSize, foodSize);
     food->setBrush(QBrush(Qt::cyan));
     ui->graphicsView->scene()->addItem(food);
+    if(this->obstacle_render)
+    {
+        obstacle = new QGraphicsRectItem(obstacleX, obstacleY , obstacleSizeX, obstacleSizeY);
+        obstacle->setBrush(QBrush(Qt::gray));
+        ui->graphicsView->scene()->addItem(obstacle);
+    }
     for(unsigned int i = 0; i < this->sim.world.sampleSet.size(); ++i)
     {
         ant = new QGraphicsRectItem(this->sim.world.sampleSet.at(i).position.x(), this->sim.world.sampleSet.at(i).position.y(), sampleSize, sampleSize);
@@ -159,6 +173,13 @@ void MainWindow::moveItemToScene()
     food = new QGraphicsRectItem(foodX, foodY , foodSize, foodSize);
     food->setBrush(QBrush(Qt::cyan));
     ui->graphicsView->scene()->addItem(food);
+    if(this->obstacle_render)
+    {
+        obstacle = new QGraphicsRectItem(obstacleX, obstacleY , obstacleSizeX, obstacleSizeY);
+        obstacle->setBrush(QBrush(Qt::gray));
+        ui->graphicsView->scene()->addItem(obstacle);
+    }
+
     for(unsigned int i = 0; i < this->sim.world.sampleSet.size(); ++i)
     {
         ant = new QGraphicsRectItem(this->sim.world.sampleSet.at(i).position.x(), this->sim.world.sampleSet.at(i).position.y(), sampleSize, sampleSize);
@@ -321,5 +342,6 @@ void MainWindow::on_checkBox_6_clicked(bool checked)
 // not used
 void MainWindow::on_progressBar_valueChanged(int value)
 {
+    value++;
     //nothing
 }

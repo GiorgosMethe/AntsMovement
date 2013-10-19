@@ -70,7 +70,7 @@ void simulation::updateHunger(sample &tmp)
 
 void simulation::agentActionSelection(sample &tmp)
 {
-    if(unifRand() > 0.8)
+    if(unifRand() > 0.6)
         this->randomAgentAction(tmp);
     else
         this->greedyAgentAction(tmp);
@@ -106,9 +106,12 @@ void simulation::greedyAgentAction(sample &tmp)
         tmp.previousPosition.setX(tmp.position.x());
         tmp.previousPosition.setY(tmp.position.y());
         if(tmp.position.x() + dx < this->worldWidth - 5 && tmp.position.x() + dx > 5)
-            tmp.position.setX(tmp.position.x() + dx);
-        if(tmp.position.y() + dy < this->worldHeight - 5 && tmp.position.y() + dy > 5)
-            tmp.position.setY(tmp.position.y() + dy);
+            if(tmp.position.y() + dy < this->worldHeight - 5 && tmp.position.y() + dy > 5)
+                if(!isObstacle(tmp.position.x() + dx, tmp.position.y() + dy))
+                {
+                    tmp.position.setY(tmp.position.y() + dy);
+                    tmp.position.setX(tmp.position.x() + dx);
+                }
     }
     else
     {
@@ -117,9 +120,12 @@ void simulation::greedyAgentAction(sample &tmp)
         tmp.previousPosition.setX(tmp.position.x());
         tmp.previousPosition.setY(tmp.position.y());
         if(tmp.position.x() + x - 1 < this->worldWidth - 5 && tmp.position.x() + x - 1 > 5)
-            tmp.position.setX(tmp.position.x() + x - 1);
-        if(tmp.position.y() + y - 1 < this->worldHeight - 5 && tmp.position.y() + y - 1 > 5)
-            tmp.position.setY(tmp.position.y() + y - 1);
+            if(tmp.position.y() + y - 1 < this->worldHeight - 5 && tmp.position.y() + y - 1 > 5)
+                if(!isObstacle(tmp.position.x() + x - 1, tmp.position.y() + y - 1))
+                {
+                    tmp.position.setY(tmp.position.y() + y - 1);
+                    tmp.position.setX(tmp.position.x() + x - 1);
+                }
     }
     return;
 }
@@ -131,22 +137,25 @@ void simulation::randomAgentAction(sample &tmp)
     tmp.previousPosition.setX(tmp.position.x());
     tmp.previousPosition.setY(tmp.position.y());
     if(tmp.position.x() + x - 1 < this->worldWidth - 5 && tmp.position.x() + x - 1 > 5)
-        tmp.position.setX(tmp.position.x() + x - 1);
-    if(tmp.position.y() + y - 1 < this->worldHeight - 5 && tmp.position.y() + y - 1 > 5)
-        tmp.position.setY(tmp.position.y() + y - 1);
+        if(tmp.position.y() + y - 1 < this->worldHeight - 5 && tmp.position.y() + y - 1 > 5)
+            if(!isObstacle(tmp.position.x() + x - 1, tmp.position.y() + y - 1))
+            {
+                tmp.position.setY(tmp.position.y() + y - 1);
+                tmp.position.setX(tmp.position.x() + x - 1);
+            }
 }
 
 void simulation::agentPheromoneUpdate(sample tmp)
 {
     double max = this->world.food_pheromone[tmp.previousPosition.x()][tmp.previousPosition.y()];
 
-    double discounted = max - discount;
+    double discounted = max - sqrt(pow(tmp.position.x()- tmp.previousPosition.x(),2) + pow(tmp.position.y()- tmp.previousPosition.y(),2));
     if(discounted > this->world.food_pheromone[tmp.position.x()][tmp.position.y()])
         this->world.food_pheromone[tmp.position.x()][tmp.position.y()] = discounted;
 
     max = this->world.home_pheromone[tmp.previousPosition.x()][tmp.previousPosition.y()];
 
-    discounted = max - discount;
+    discounted = max - sqrt(pow(tmp.position.x()- tmp.previousPosition.x(),2) + pow(tmp.position.y()- tmp.previousPosition.y(),2));
     if(discounted > this->world.home_pheromone[tmp.position.x()][tmp.position.y()])
         this->world.home_pheromone[tmp.position.x()][tmp.position.y()] = discounted;
 }
@@ -160,27 +169,39 @@ void simulation::droppingPheromone(QPoint position)
         this->world.food_pheromone[position.x()][position.y()] = this->max_food_pheromone;
 }
 
+bool simulation::isObstacle(int i, int j)
+{
+    if(!this->obstacle)
+        return false;
+    if(i >= obstacleX && i <= (obstacleX+obstacleSizeX))
+        return (j >= obstacleY && j <= (obstacleY+obstacleSizeY));
+    return false;
+}
+
 void simulation::diffusion()
 {
     std::vector<change> temp;
 
     for(int i = 1; i < this->worldWidth - 1; i++){
         for(int j = 1; j < this->worldHeight - 1; j++){
-            double oldFoodValue = this->world.food_pheromone[i][j];
-            double newFoodValue = this->world.food_pheromone[i][j];
-            double max = 0.0;
-            for(int x = -1; x < 2; x++)
-                for(int y = -1; y < 2; y++)
-                    if(y!=0 && x!=0 && this->world.food_pheromone[i+x][j+y]  / sqrt(x*x + y*y)> max){
-                        max = this->world.food_pheromone[i+x][j+y] / sqrt(x*x + y*y);
-                    }
-            newFoodValue = diffusion_const * max;
-            if(oldFoodValue < newFoodValue || oldFoodValue == 0.0){
-                change tmp;
-                tmp.pos.setX(i);
-                tmp.pos.setY(j);
-                tmp.newValue = newFoodValue;
-                temp.push_back(tmp);
+            if(!isObstacle(i,j))
+            {
+                double oldFoodValue = this->world.food_pheromone[i][j];
+                double newFoodValue = this->world.food_pheromone[i][j];
+                double max = 0.0;
+                for(int x = -1; x < 2; x++)
+                    for(int y = -1; y < 2; y++)
+                        if(y!=0 && x!=0 && this->world.food_pheromone[i+x][j+y] / sqrt(x*x + y*y)> max){
+                            max = this->world.food_pheromone[i+x][j+y] / sqrt(x*x + y*y);
+                        }
+                newFoodValue = diffusion_const * max;
+                if(oldFoodValue < newFoodValue || oldFoodValue == 0.0){
+                    change tmp;
+                    tmp.pos.setX(i);
+                    tmp.pos.setY(j);
+                    tmp.newValue = newFoodValue;
+                    temp.push_back(tmp);
+                }
             }
         }
     }
@@ -192,21 +213,24 @@ void simulation::diffusion()
 
     for(int i = 1; i < this->worldWidth - 1; i++){
         for(int j = 1; j < this->worldHeight - 1; j++){
-            double oldHomeValue = this->world.home_pheromone[i][j];
-            double newHomeValue = this->world.home_pheromone[i][j];
-            double max = 0.0;
-            for(int x = -1; x < 2; x++)
-                for(int y = -1; y < 2; y++)
-                    if(y!=0 && x!=0 && this->world.home_pheromone[i+x][j+y]  / sqrt(x*x + y*y)> max){
-                        max = this->world.home_pheromone[i+x][j+y] / sqrt(x*x + y*y);
-                    }
-            newHomeValue = diffusion_const * max;
-            if(oldHomeValue < newHomeValue || oldHomeValue == 0.0){
-                change tmp;
-                tmp.pos.setX(i);
-                tmp.pos.setY(j);
-                tmp.newValue = newHomeValue;
-                temp.push_back(tmp);
+            if(!isObstacle(i,j))
+            {
+                double oldHomeValue = this->world.home_pheromone[i][j];
+                double newHomeValue = this->world.home_pheromone[i][j];
+                double max = 0.0;
+                for(int x = -1; x < 2; x++)
+                    for(int y = -1; y < 2; y++)
+                        if(y!=0 && x!=0 && this->world.home_pheromone[i+x][j+y] / sqrt(x*x + y*y)> max){
+                            max = this->world.home_pheromone[i+x][j+y] / sqrt(x*x + y*y);
+                        }
+                newHomeValue = diffusion_const * max;
+                if(oldHomeValue < newHomeValue || oldHomeValue == 0.0){
+                    change tmp;
+                    tmp.pos.setX(i);
+                    tmp.pos.setY(j);
+                    tmp.newValue = newHomeValue;
+                    temp.push_back(tmp);
+                }
             }
         }
     }
@@ -224,10 +248,12 @@ void simulation::evaporation()
     {
         for(int j = 0; j < this->worldHeight; j++)
         {
-            if(this->world.home_pheromone[i][j] != 0.0)
-                this->world.home_pheromone[i][j] *= evaporation_const;
-            if(this->world.food_pheromone[i][j] != 0.0)
-                this->world.food_pheromone[i][j] *= evaporation_const;
+            if(!isObstacle(i,j)){
+                if(this->world.home_pheromone[i][j] != 0.0)
+                    this->world.home_pheromone[i][j] *= evaporation_const;
+                if(this->world.food_pheromone[i][j] != 0.0)
+                    this->world.food_pheromone[i][j] *= evaporation_const;
+            }
         }
     }
     return;

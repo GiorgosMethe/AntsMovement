@@ -77,6 +77,7 @@ private:
     QGraphicsRectItem* ant;
     QGraphicsRectItem* nest;
     QGraphicsRectItem* food;
+    QGraphicsRectItem* obstacle;
     void moveItemToScene();
     void addItemToScene();
     void updateRendering();
@@ -85,6 +86,7 @@ private:
     bool renderExploration;
     bool renderHomePheromone;
     bool renderFoodPheromone;
+    bool obstacle_render;
     bool _evaporation;
     bool _diffusion;
     QTimer *timer;

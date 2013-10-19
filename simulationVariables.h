@@ -10,16 +10,20 @@
 #define nestY 6
 #define foodX 200
 #define foodY 200
+#define nestSize 20
+#define foodSize 20
+#define obstacleX 100
+#define obstacleY 100
+#define obstacleSizeX 50
+#define obstacleSizeY 50
 #define maxFoodPheromone 1000.0
 #define maxHomePheromone 1000.0
 #define discount 2
-#define evaporation_const 1.0
-#define diffusion_const 0.999
-#define nestSize 20
-#define foodSize 20
+#define evaporation_const 0.99
+#define diffusion_const 0.8
 #define sampleSize 3
 #define egreedy 0.8
-#define hungry_step 0.001
+#define hungry_step 0.0005
 #define hungry_threshold 0.3
 
 #endif // SIMULATIONVARIABLES_H

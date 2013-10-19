@@ -1,0 +1,17 @@
+How the simulation works:
+\begin{itemize}
+\item Initially all ants located at their nest
+\item They start a random walk
+\item They are dropping home pheromone as they are located in their nest:
+\begin{equation}
+{pheromone\_{home}}_t^{i,j} = max\_pheromone\_home, if\ i,j = nest
+\end{equation}
+\item When they move they take with them the pheromone:
+\begin{equation}
+{pheromone\_{home}}_t^{i,j} = \smash{\displaystyle\max_{-1 \leq x,y \leq 1}}[{pheromone\_{home}}_{t-1}^{i+x,j+y}] - \beta
+\end{equation}
+\item instead:
+\begin{equation}
+{pheromone\_{home}}_t^{i,j} = {pheromone\_{home}}_{t-1}^{i,j} - \beta
+\end{equation}
+\end{itemize}
