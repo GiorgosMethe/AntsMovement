@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->renderHomePheromone = true;
     this->_diffusion = false;
     this->_evaporation = false;
-    this->obstacle_render = false;
+    this->obstacle_render = true;
 
     //initialize gui
     ui->setupUi(this);

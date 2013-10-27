@@ -94,6 +94,7 @@ How the simulation works:
 {ph\_{food}}_t^{i,j} = max\_ph\_food, if\ i,j = food
 \end{equation}
 \item Ants leave trails as they move out from the food source, with the same way they do for home. But now they are dropping food pheromone.
+\item Value Iteration?
 \item When the ants have $h < hunger\_threshold$, $0.3$ is used. They want to go back at their nest.
 \item When the ants have $h \geq hunger\_threshold$. They want to go find food again.
 \end{itemize}
@@ -106,6 +107,7 @@ Epsilon-greedy action selection:
 \item The best action is selected for a proportion $1 - \epsilon$ of the trials, and another action is randomly selected for a proportion $\epsilon$.
 \item A typical parameter that is used is: $\epsilon = 0.2$, but this can vary.
 \item Depending where they want to go, they follow with $\epsilon$-greedy the  pheromone.
+\item When greedy action is chosen, ants select the cell with the maximum pheromone.
 \end{itemize}
 \end{frame}
 
@@ -160,6 +162,10 @@ Future Work:
 \begin{itemize}
 \item Include also death, born rates.
 \item Make the simulation more realistic, constants, distances, etc..
+\end{itemize}
+Source code: 
+\begin{itemize}
+\item github.com/GiorgosMethe/AntsMovement
 \end{itemize}
 \end{frame}
 
