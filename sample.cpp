@@ -1,3 +1,6 @@
+/*
+tralala
+*/
 #include "sample.h"
 
 sample::sample()
